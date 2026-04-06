@@ -1,0 +1,288 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --accent: #00f5d4;
+  --accent-2: #6c63ff;
+  --bg-primary: #050b1a;
+  --bg-secondary: #0d1b35;
+  --text-primary: #e8f4fd;
+  --text-secondary: #8bafd0;
+  --border: rgba(0, 245, 212, 0.12);
+}
+
+/* ─── Base ──────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: "Inter", sans-serif;
+  overflow-x: hidden;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 245, 212, 0.4);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ─── Selection ──────────────────────────────────────── */
+::selection {
+  background: rgba(0, 245, 212, 0.25);
+  color: var(--accent);
+}
+
+/* ─── Typography helpers ─────────────────────────────── */
+.font-mono { font-family: "JetBrains Mono", monospace; }
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.neon-text {
+  color: var(--accent);
+  text-shadow:
+    0 0 8px rgba(0, 245, 212, 0.7),
+    0 0 24px rgba(0, 245, 212, 0.35);
+}
+
+/* ─── Layout helpers ─────────────────────────────────── */
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ─── Glass card ─────────────────────────────────────── */
+.glass-card {
+  background: rgba(13, 27, 53, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(0, 245, 212, 0.35);
+  box-shadow:
+    0 0 30px rgba(0, 245, 212, 0.08),
+    inset 0 0 30px rgba(0, 245, 212, 0.03);
+}
+
+/* ─── Buttons ────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  background: var(--accent);
+  color: var(--bg-primary);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-primary:hover {
+  box-shadow: 0 0 30px rgba(0, 245, 212, 0.5);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.btn-outline:hover {
+  background: var(--accent);
+  color: var(--bg-primary);
+  box-shadow: 0 0 25px rgba(0, 245, 212, 0.35);
+  transform: translateY(-2px);
+}
+
+/* ─── Tech badge ─────────────────────────────────────── */
+.tech-badge {
+  display: inline-block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.68rem;
+  padding: 3px 10px;
+  border-radius: 4px;
+  background: rgba(108, 99, 255, 0.12);
+  border: 1px solid rgba(108, 99, 255, 0.28);
+  color: #a78bfa;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+.tech-badge:hover {
+  background: rgba(108, 99, 255, 0.22);
+  border-color: rgba(108, 99, 255, 0.5);
+}
+
+/* ─── Skill badge ────────────────────────────────────── */
+.skill-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.85rem;
+  background: rgba(0, 245, 212, 0.05);
+  border: 1px solid rgba(0, 245, 212, 0.13);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  cursor: default;
+  transition: all 0.2s ease;
+}
+.skill-badge:hover {
+  background: rgba(0, 245, 212, 0.1);
+  border-color: rgba(0, 245, 212, 0.38);
+  color: var(--accent);
+  box-shadow: 0 0 12px rgba(0, 245, 212, 0.12);
+  transform: translateY(-1px);
+}
+
+/* ─── Section title ──────────────────────────────────── */
+.section-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.section-label::before { content: "//"; opacity: 0.5; }
+
+/* ─── Grid background ────────────────────────────────── */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(0, 245, 212, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 245, 212, 0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ─── Photo glow ─────────────────────────────────────── */
+.photo-glow {
+  box-shadow:
+    0 0 0 2px rgba(0, 245, 212, 0.3),
+    0 0 30px rgba(0, 245, 212, 0.18),
+    0 0 60px rgba(0, 245, 212, 0.08);
+}
+
+/* ─── Neon border pulse ──────────────────────────────── */
+.neon-border {
+  border: 1px solid rgba(0, 245, 212, 0.3);
+  box-shadow: 0 0 20px rgba(0, 245, 212, 0.08);
+}
+
+/* ─── Project card ───────────────────────────────────── */
+.project-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+.project-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.project-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 60px rgba(0, 245, 212, 0.1);
+  border-color: rgba(0, 245, 212, 0.3) !important;
+}
+.project-card:hover::before { opacity: 1; }
+
+/* ─── Achievement card ───────────────────────────────── */
+.achievement-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.achievement-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 35px rgba(0, 245, 212, 0.12);
+  border-color: rgba(0, 245, 212, 0.4) !important;
+}
+
+/* ─── Particles overlay ──────────────────────────────── */
+#tsparticles {
+  position: absolute !important;
+  inset: 0;
+  z-index: 0;
+}
+
+/* ─── Stat card ──────────────────────────────────────── */
+.stat-card {
+  background: rgba(0, 245, 212, 0.05);
+  border: 1px solid rgba(0, 245, 212, 0.12);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  text-align: center;
+  transition: all 0.25s ease;
+}
+.stat-card:hover {
+  background: rgba(0, 245, 212, 0.1);
+  border-color: rgba(0, 245, 212, 0.3);
+}
+
+/* ─── Navbar ─────────────────────────────────────────── */
+.navbar-blur {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(5, 11, 26, 0.85);
+  border-bottom: 1px solid rgba(0, 245, 212, 0.08);
+}
+
+/* ─── Contact link ───────────────────────────────────── */
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  background: rgba(13, 27, 53, 0.5);
+  border: 1px solid rgba(0, 245, 212, 0.1);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+.contact-link:hover {
+  background: rgba(0, 245, 212, 0.08);
+  border-color: rgba(0, 245, 212, 0.35);
+  color: var(--accent);
+  transform: translateX(4px);
+}
+
+/* ─── Scrolled section reveal ────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+}

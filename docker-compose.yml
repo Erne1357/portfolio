@@ -1,0 +1,40 @@
+version: "3.9"
+name : portfolio
+services:
+  backend:
+    build: ./backend
+    container_name: portfolio-backend
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=production
+    expose:
+      - "8000"
+    networks:
+      - portfolio-net
+
+  frontend:
+    build: ./frontend
+    container_name: portfolio-frontend
+    restart: unless-stopped
+    expose:
+      - "80"
+    depends_on:
+      - backend
+    networks:
+      - portfolio-net
+
+  nginx:
+    build: ./nginx
+    container_name: portfolio-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - portfolio-net
+
+networks:
+  portfolio-net:
+    driver: bridge
