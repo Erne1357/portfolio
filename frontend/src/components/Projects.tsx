@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { Github, ExternalLink, ChevronDown, ChevronUp, CheckCircle2, ChevronLeft, ChevronRight, ImageIcon, X } from "lucide-react";
 import { usePortfolioData } from "../hooks/usePortfolioData";
@@ -22,6 +23,126 @@ const CATEGORY_TEXT: Record<string, string> = {
   green: "#4ade80",
 };
 
+function ImageLightbox({
+  images,
+  startIndex,
+  onClose,
+}: {
+  images: Project["images"];
+  startIndex: number;
+  onClose: () => void;
+}) {
+  const [current, setCurrent] = useState(startIndex);
+
+  const prev = useCallback(
+    () => setCurrent((c) => (c === 0 ? images.length - 1 : c - 1)),
+    [images.length]
+  );
+  const next = useCallback(
+    () => setCurrent((c) => (c === images.length - 1 ? 0 : c + 1)),
+    [images.length]
+  );
+
+  // Lock body scroll & keyboard navigation
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") prev();
+      if (e.key === "ArrowRight") next();
+    };
+    window.addEventListener("keydown", handleKey);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [onClose, prev, next]);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-[100] bg-black/95 flex flex-col"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      {/* Top bar: counter + close */}
+      <div className="flex items-center justify-between px-6 py-4 flex-shrink-0">
+        <span className="text-white/60 text-sm font-mono">
+          {current + 1} / {images.length}
+        </span>
+        <button
+          onClick={onClose}
+          className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+        >
+          <X size={20} />
+        </button>
+      </div>
+
+      {/* Image area */}
+      <div className="flex-1 flex items-center justify-center px-16 pb-4 min-h-0 relative">
+        {/* Prev arrow */}
+        {images.length > 1 && (
+          <button
+            onClick={prev}
+            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10"
+          >
+            <ChevronLeft size={24} />
+          </button>
+        )}
+
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={current}
+            src={images[current].src}
+            alt={images[current].alt}
+            className="max-w-full max-h-full object-contain rounded-lg select-none"
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.97 }}
+            transition={{ duration: 0.2 }}
+            draggable={false}
+          />
+        </AnimatePresence>
+
+        {/* Next arrow */}
+        {images.length > 1 && (
+          <button
+            onClick={next}
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10"
+          >
+            <ChevronRight size={24} />
+          </button>
+        )}
+      </div>
+
+      {/* Bottom: caption + dots */}
+      <div className="flex flex-col items-center gap-3 px-6 pb-6 flex-shrink-0">
+        <p className="text-white/70 text-sm font-mono text-center max-w-2xl">
+          {images[current].alt}
+        </p>
+        {images.length > 1 && (
+          <div className="flex gap-2">
+            {images.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                className="w-2 h-2 rounded-full transition-all"
+                style={{
+                  background: i === current ? "#fff" : "rgba(255,255,255,0.3)",
+                  transform: i === current ? "scale(1.4)" : "scale(1)",
+                }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
 function ImageGallery({ images, accentColor }: { images: Project["images"]; accentColor: string }) {
   const [current, setCurrent] = useState(0);
   const [lightbox, setLightbox] = useState(false);
@@ -41,7 +162,6 @@ function ImageGallery({ images, accentColor }: { images: Project["images"]; acce
     setErrorImages((prev) => new Set(prev).add(index));
   };
 
-  // If all images failed to load, don't show gallery
   if (errorImages.size === images.length) return null;
 
   return (
@@ -125,52 +245,19 @@ function ImageGallery({ images, accentColor }: { images: Project["images"]; acce
         </p>
       </div>
 
-      {/* Lightbox */}
-      <AnimatePresence>
-        {lightbox && (
-          <motion.div
-            className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setLightbox(false)}
-          >
-            <button
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10"
-              onClick={() => setLightbox(false)}
-            >
-              <X size={20} />
-            </button>
-
-            <div className="relative max-w-5xl w-full" onClick={(e) => e.stopPropagation()}>
-              <img
-                src={images[current].src}
-                alt={images[current].alt}
-                className="w-full h-auto max-h-[85vh] object-contain rounded-lg"
-              />
-              {images.length > 1 && (
-                <>
-                  <button
-                    onClick={prev}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/60 border border-white/20 flex items-center justify-center text-white hover:bg-black/80"
-                  >
-                    <ChevronLeft size={24} />
-                  </button>
-                  <button
-                    onClick={next}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/60 border border-white/20 flex items-center justify-center text-white hover:bg-black/80"
-                  >
-                    <ChevronRight size={24} />
-                  </button>
-                </>
-              )}
-              <p className="text-white/70 text-sm font-mono mt-3 text-center">
-                {images[current].alt} ({current + 1}/{images.length})
-              </p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Fullscreen Lightbox Modal — rendered via portal to escape transform parents */}
+      {createPortal(
+        <AnimatePresence>
+          {lightbox && (
+            <ImageLightbox
+              images={images}
+              startIndex={current}
+              onClose={() => setLightbox(false)}
+            />
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </>
   );
 }
