@@ -28,7 +28,7 @@ DATA = {
             ],
             "category": "Web Platform",
             "category_color": "cyan",
-            "github": "https://github.com/Erne1357",
+            "github": "https://github.com/Erne1357/SIIAP",
             "live": None,
             "status": "Production",
             "features": [
@@ -74,7 +74,7 @@ DATA = {
             ],
             "category": "Multi-App Platform",
             "category_color": "purple",
-            "github": "https://github.com/Erne1357",
+            "github": "https://github.com/Erne1357/itcj",
             "live": None,
             "status": "Production",
             "features": [
@@ -116,7 +116,7 @@ DATA = {
             "tech": ["C#", ".NET 6", "WinForms", "PostgreSQL", "iTextSharp", "Npgsql"],
             "category": "Desktop App",
             "category_color": "green",
-            "github": None,
+            "github": "https://github.com/Erne1357/deferAplication",
             "live": None,
             "status": "88% Complete",
             "features": [
@@ -163,7 +163,7 @@ DATA = {
             ],
             "category": "Plataforma Web",
             "category_color": "cyan",
-            "github": "https://github.com/Erne1357",
+            "github": "https://github.com/Erne1357/SIIAP",
             "live": None,
             "status": "Producción",
             "features": [
@@ -209,7 +209,7 @@ DATA = {
             ],
             "category": "Plataforma Multi-App",
             "category_color": "purple",
-            "github": "https://github.com/Erne1357",
+            "github": "https://github.com/Erne1357/itcj",
             "live": None,
             "status": "Producción",
             "features": [
@@ -253,7 +253,7 @@ DATA = {
             "tech": ["C#", ".NET 6", "WinForms", "PostgreSQL", "iTextSharp", "Npgsql"],
             "category": "App de Escritorio",
             "category_color": "green",
-            "github": None,
+            "github": "https://github.com/Erne1357/deferAplication",
             "live": None,
             "status": "88% Completado",
             "features": [
